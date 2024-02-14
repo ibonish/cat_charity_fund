@@ -1,12 +1,15 @@
-from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Optional
+
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.crud.base import CRUDBase
 from app.models.charity_project import CharityProject
-from app.schemas.charity_project import CharityProjectCreate, CharityProjectUpdate
+from app.schemas.charity_project import (CharityProjectCreate,
+                                         CharityProjectUpdate)
 
 
-class CRUDMeetingRoom(CRUDBase[
+class CRUDCharityProject(CRUDBase[
     CharityProject,
     CharityProjectCreate,
     CharityProjectUpdate
@@ -25,4 +28,4 @@ class CRUDMeetingRoom(CRUDBase[
         return db_charity_project_id
 
 
-charity_project_crud = CRUDMeetingRoom(CharityProject)
+charity_project_crud = CRUDCharityProject(CharityProject)

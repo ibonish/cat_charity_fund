@@ -1,8 +1,11 @@
 from typing import Generic, List, Optional, Type, TypeVar
-from sqlalchemy import select
-from pydantic import BaseModel
-from sqlalchemy.ext.asyncio import AsyncSession
+
 from fastapi.encoders import jsonable_encoder
+from pydantic import BaseModel
+# from xmlrpc.client import Boolean
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.core.db import Base
 
 ModelType = TypeVar('ModelType', bound=Base)
@@ -72,3 +75,16 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         await session.delete(db_obj)
         await session.commit()
         return db_obj
+
+    async def get_all_by_attribute(
+            self,
+            attr_name: str,
+            attr_value: bool,
+            session: AsyncSession,
+    ) -> List[ModelType]:
+        attr = getattr(self.model, attr_name)
+        db_obj = await session.execute(
+            select(self.model).where(attr == attr_value).order_by(
+                self.model.id)
+        )
+        return db_obj.scalars().all()

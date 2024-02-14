@@ -1,19 +1,13 @@
-
 from sqlalchemy import (Boolean, CheckConstraint, Column, DateTime, Integer,
-                        String, Text, func)
+                        Text, func)
 
 from app.core.db import Base
 
 
-class CharityProject(Base):
-    name = Column(
-        String(100),
-        unique=True,
-        nullable=False
-    )
-    description = Column(
+class Donation(Base):
+    comment = Column(
         Text,
-        nullable=False
+        nullable=True
     )
     full_amount = Column(
         Integer,
