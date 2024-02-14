@@ -5,7 +5,7 @@ from pydantic import BaseModel
 # from xmlrpc.client import Boolean
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from app.models import User
 from app.core.db import Base
 
 ModelType = TypeVar('ModelType', bound=Base)
@@ -42,9 +42,12 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     async def create(
             self,
             obj_in: CreateSchemaType,
-            session: AsyncSession
+            session: AsyncSession,
+            user: Optional[User] = None
     ) -> ModelType:
         obj_in_data = obj_in.dict()
+        if user is not None:
+            obj_in_data['user_id'] = user.id
         db_obj = self.model(**obj_in_data)
         session.add(db_obj)
         await session.commit()

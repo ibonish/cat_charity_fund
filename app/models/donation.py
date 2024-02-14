@@ -1,10 +1,14 @@
 from sqlalchemy import (Boolean, CheckConstraint, Column, DateTime, Integer,
-                        Text, func)
+                        Text, func, ForeignKey)
 
 from app.core.db import Base
 
 
 class Donation(Base):
+    user_id = Column(
+        Integer,
+        ForeignKey('user.id')
+    )
     comment = Column(
         Text,
         nullable=True
@@ -27,6 +31,7 @@ class Donation(Base):
         DateTime,
         default=func.now(), nullable=False)
     close_date = Column(DateTime)
+    user_id = Column(Integer, ForeignKey('user.id'))
 
     table_args = (
         CheckConstraint(

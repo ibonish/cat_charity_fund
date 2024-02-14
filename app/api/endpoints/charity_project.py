@@ -10,6 +10,7 @@ from app.crud.servises import invest_funds
 from app.schemas.charity_project import (CharityProjectCreate,
                                          CharityProjectDB,
                                          CharityProjectUpdate)
+from app.core.user import current_superuser
 
 router = APIRouter()
 
@@ -18,6 +19,7 @@ router = APIRouter()
     '/',
     response_model=CharityProjectDB,
     response_model_exclude_none=True,
+    dependencies=[Depends(current_superuser)],
 )
 async def create_charity_project(
         charity_project: CharityProjectCreate,
@@ -44,7 +46,7 @@ async def get_all_charity_projects(
 @router.delete(
     '/{project_id}',
     response_model=CharityProjectDB,
-    response_model_exclude_none=True,
+    dependencies=[Depends(current_superuser)],
 )
 async def delete_charity_project(
         project_id: int,
@@ -60,7 +62,7 @@ async def delete_charity_project(
 @router.patch(
     '/{project_id}',
     response_model=CharityProjectDB,
-    response_model_exclude_none=True,
+    dependencies=[Depends(current_superuser)],
 )
 async def update_charity_project(
         project_id: int,
