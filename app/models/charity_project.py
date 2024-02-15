@@ -3,7 +3,7 @@ from sqlalchemy import (Boolean, CheckConstraint, Column, DateTime, Integer,
                         String, Text, func)
 
 from app.core.db import Base
-
+from datetime import datetime
 
 class CharityProject(Base):
     name = Column(
@@ -31,7 +31,9 @@ class CharityProject(Base):
     )
     create_date = Column(
         DateTime,
-        default=func.now(), nullable=False)
+        default=datetime.now,
+        nullable=False
+    )
     close_date = Column(DateTime)
 
     table_args = (

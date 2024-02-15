@@ -1,6 +1,5 @@
-from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from datetime import datetime
 from app.crud.charity_project import charity_project_crud
 from app.crud.donation import donation_crud
 
@@ -21,11 +20,11 @@ async def invest_funds(session: AsyncSession):
 
             if donation.invested_amount == donation.full_amount:
                 donation.fully_invested = True
-                donation.close_date = func.now()
+                donation.close_date = datetime.now()
 
             if project.invested_amount == project.full_amount:
                 project.fully_invested = True
-                project.close_date = func.now()
+                project.close_date = datetime.now()
 
             if donation.fully_invested:
                 break

@@ -1,6 +1,6 @@
 from sqlalchemy import (Boolean, CheckConstraint, Column, DateTime, Integer,
                         Text, func, ForeignKey)
-
+from datetime import datetime
 from app.core.db import Base
 
 
@@ -29,7 +29,9 @@ class Donation(Base):
     )
     create_date = Column(
         DateTime,
-        default=func.now(), nullable=False)
+        default=datetime.now,
+        nullable=False
+    )
     close_date = Column(DateTime)
     user_id = Column(Integer, ForeignKey('user.id'))
 

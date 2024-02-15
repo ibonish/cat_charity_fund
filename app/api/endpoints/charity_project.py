@@ -53,7 +53,7 @@ async def delete_charity_project(
         session: AsyncSession = Depends(get_async_session),
 ) -> CharityProjectDB:
     charity_project = await check_project_exists(project_id, session)
-    await check_project_is_closed(charity_project)
+    # await check_project_is_closed(charity_project)
     await check_project_is_invested(project_id, session)
     charity_project = await charity_project_crud.remove(charity_project, session)
     return charity_project
@@ -75,6 +75,6 @@ async def update_charity_project(
     if new_charity_project.name:
         await check_name_duplicate(new_charity_project.name, session)
     if new_charity_project.full_amount and charity_project.invested_amount:
-        charity_project = await check_new_full_amount(charity_project, new_charity_project)
+        await check_new_full_amount(charity_project, new_charity_project)
     charity_project = await charity_project_crud.update(charity_project, new_charity_project, session)
     return charity_project
