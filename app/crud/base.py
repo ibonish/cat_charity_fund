@@ -2,11 +2,11 @@ from typing import Generic, List, Optional, Type, TypeVar
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
-# from xmlrpc.client import Boolean
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import User
+
 from app.core.db import Base
+from app.models import User
 
 ModelType = TypeVar('ModelType', bound=Base)
 CreateSchemaType = TypeVar('CreateSchemaType', bound=BaseModel)

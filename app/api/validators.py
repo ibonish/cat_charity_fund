@@ -6,15 +6,25 @@ from app.models.charity_project import CharityProject
 from app.schemas.charity_project import CharityProjectUpdate
 
 
+CHECK_NAME_MESSAGE = 'Проект с таким именем уже существует!'
+NOT_FOUND = 'Проект не найден!'
+CLOSED_PROJECT = 'Закрытый проект нельзя редактировать!'
+INVESTED_PROJECT = 'В проект были внесены средства, не подлежит удалению!'
+CHECK_FULL_AMOUNT = 'Новая сумма не меньше уже инвестированных средств!'
+
+
 async def check_name_duplicate(
         project_name: str,
         session: AsyncSession,
 ) -> None:
-    project_id = await charity_project_crud.get_project_id_by_name(project_name, session)
+    project_id = await charity_project_crud.get_project_id_by_name(
+        project_name,
+        session
+    )
     if project_id is not None:
         raise HTTPException(
             status_code=400,
-            detail='Проект с таким именем уже существует!',
+            detail=CHECK_NAME_MESSAGE,
         )
 
 
@@ -22,11 +32,14 @@ async def check_project_exists(
         charity_project_id: int,
         session: AsyncSession,
 ) -> CharityProject:
-    charity_project = await charity_project_crud.get(charity_project_id, session)
+    charity_project = await charity_project_crud.get(
+        charity_project_id,
+        session
+    )
     if charity_project is None:
         raise HTTPException(
             status_code=404,
-            detail='Проект не найден!'
+            detail=NOT_FOUND
         )
     return charity_project
 
@@ -37,18 +50,23 @@ async def check_project_is_closed(
     if charity_project.fully_invested:
         raise HTTPException(
             status_code=400,
-            detail='Закрытый проект нельзя редактировать!')
+            detail=CLOSED_PROJECT
+        )
 
 
 async def check_project_is_invested(
         project_id: int,
         session: AsyncSession
 ) -> None:
-    charity_project = await charity_project_crud.get(project_id, session)
+    charity_project = await charity_project_crud.get(
+        project_id,
+        session
+    )
     if charity_project.invested_amount:
         raise HTTPException(
             status_code=400,
-            detail='В проект были внесены средства, не подлежит удалению!')
+            detail=INVESTED_PROJECT
+        )
 
 
 async def check_new_full_amount(
@@ -58,4 +76,5 @@ async def check_new_full_amount(
     if charity_project.invested_amount > new_charity_project.full_amount:
         raise HTTPException(
             status_code=400,
-            detail='Новая сумма не меньше уже инвестированных средств!')
+            detail=CHECK_FULL_AMOUNT
+        )

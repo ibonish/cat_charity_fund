@@ -1,9 +1,11 @@
 
+from datetime import datetime
+
 from sqlalchemy import (Boolean, CheckConstraint, Column, DateTime, Integer,
-                        String, Text, func)
+                        String, Text)
 
 from app.core.db import Base
-from datetime import datetime
+
 
 class CharityProject(Base):
     name = Column(

@@ -1,6 +1,8 @@
-from sqlalchemy import (Boolean, CheckConstraint, Column, DateTime, Integer,
-                        Text, func, ForeignKey)
 from datetime import datetime
+
+from sqlalchemy import (Boolean, CheckConstraint, Column, DateTime, ForeignKey,
+                        Integer, Text)
+
 from app.core.db import Base
 
 
