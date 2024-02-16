@@ -51,6 +51,12 @@ python3 -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
+Примените миграции:
+
+```
+alembic upgrade head
+```
+
 В корневой директории создать файл .env и наполнить его:
 
 ```

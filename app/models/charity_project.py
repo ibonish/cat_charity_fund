@@ -1,6 +1,5 @@
 
-from sqlalchemy import (Column,
-                        String, Text)
+from sqlalchemy import Column, String, Text
 
 from app.models.base import CharityBase
 
@@ -15,3 +14,6 @@ class CharityProject(CharityBase):
         Text,
         nullable=False
     )
+
+    def __repr__(self):
+        return super().__repr__()

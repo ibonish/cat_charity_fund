@@ -5,7 +5,6 @@ from app.crud.charity_project import charity_project_crud
 from app.models.charity_project import CharityProject
 from app.schemas.charity_project import CharityProjectUpdate
 
-
 CHECK_NAME_MESSAGE = 'Проект с таким именем уже существует!'
 NOT_FOUND = 'Проект не найден!'
 CLOSED_PROJECT = 'Закрытый проект нельзя редактировать!'

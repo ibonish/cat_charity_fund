@@ -1,9 +1,14 @@
 from datetime import datetime
 
-from sqlalchemy import (Boolean, CheckConstraint, Column, DateTime,
-                        Integer)
+from sqlalchemy import Boolean, CheckConstraint, Column, DateTime, Integer
 
 from app.core.db import Base
+
+INFORMATION_MESSAGE = (
+    'id: {id}, ',
+    'full_amount: {full_amount}, ',
+    'invested_amount: {invested_amount}'
+)
 
 
 class CharityBase(Base):
@@ -44,3 +49,10 @@ class CharityBase(Base):
             name='check_invested_amount'
         ),
     )
+
+    def __repr__(self) -> str:
+        return INFORMATION_MESSAGE.format(
+            id=self.id,
+            full_amount=self.full_amount,
+            invested_amount=self.invested_amount
+        )

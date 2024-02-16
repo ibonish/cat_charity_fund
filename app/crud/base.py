@@ -2,7 +2,7 @@ from typing import Generic, List, Optional, Type, TypeVar
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
-from sqlalchemy import select
+from sqlalchemy import asc, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import Base
@@ -50,8 +50,8 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         if user is not None:
             obj_in_data['user_id'] = user.id
         db_obj = self.model(**obj_in_data)
+        session.add(db_obj)
         if save:
-            session.add(db_obj)
             await session.commit()
             await session.refresh(db_obj)
         return db_obj
@@ -82,15 +82,15 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         await session.commit()
         return db_obj
 
-    async def get_all_by_attribute(
-            self,
-            attr_name: str,
-            attr_value: bool,
-            session: AsyncSession,
+    async def get_all_not_invested(
+        self,
+        session: AsyncSession,
     ) -> List[ModelType]:
-        attr = getattr(self.model, attr_name)
-        db_obj = await session.execute(
-            select(self.model).where(attr == attr_value).order_by(
-                self.model.id)
+        db_objects = await session.execute(
+            select(self.model).where(
+                self.model.fully_invested == 0
+            ).order_by(
+                asc(self.model.create_date)
+            )
         )
-        return db_obj.scalars().all()
+        return db_objects.scalars().all()

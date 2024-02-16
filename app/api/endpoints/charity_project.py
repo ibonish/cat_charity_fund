@@ -7,7 +7,8 @@ from app.api.validators import (check_name_duplicate, check_new_full_amount,
 from app.core.db import get_async_session
 from app.core.user import current_superuser
 from app.crud.charity_project import charity_project_crud
-from app.crud.servises import invest_funds
+from app.crud.donation import donation_crud
+from app.servises.invest import invest_funds
 from app.schemas.charity_project import (CharityProjectCreate,
                                          CharityProjectDB,
                                          CharityProjectUpdate)
@@ -18,16 +19,30 @@ router = APIRouter()
 @router.post(
     '/',
     response_model=CharityProjectDB,
-    response_model_exclude_none=True,
     dependencies=[Depends(current_superuser)],
+    response_model_exclude_none=True,
 )
 async def create_charity_project(
-        charity_project: CharityProjectCreate,
-        session: AsyncSession = Depends(get_async_session),
+    charity_project: CharityProjectCreate,
+    session: AsyncSession = Depends(get_async_session),
 ) -> CharityProjectDB:
-    await check_name_duplicate(charity_project.name, session)
-    new_charity_project = await charity_project_crud.create(charity_project, session)
-    await invest_funds(session)
+    await check_name_duplicate(
+        charity_project.name,
+        session
+    )
+    new_charity_project = await charity_project_crud.create(
+        charity_project,
+        session,
+        save=False,
+    )
+    session.add_all(
+        invest_funds(
+            new_charity_project,
+            await donation_crud.get_all_not_invested(session)
+        )
+    )
+    await session.commit()
+    await session.refresh(new_charity_project)
     return new_charity_project
 
 
