@@ -7,7 +7,9 @@ from app.core.db import Base
 INFORMATION_MESSAGE = (
     'id: {id}, ',
     'full_amount: {full_amount}, ',
-    'invested_amount: {invested_amount}'
+    'invested_amount: {invested_amount}',
+    'create_date: {create_date}',
+    'close_date: {close_date}',
 )
 
 
@@ -45,14 +47,20 @@ class CharityBase(Base):
             name='check_invested_amount'
         ),
         CheckConstraint(
-            'invested_amount > 0',
+            'invested_amount >= 0',
             name='check_invested_amount'
         ),
     )
+
+    def __init__(self, **kwargs):
+        kwargs.setdefault('invested_amount', 0)
+        super().__init__(**kwargs)
 
     def __repr__(self) -> str:
         return INFORMATION_MESSAGE.format(
             id=self.id,
             full_amount=self.full_amount,
-            invested_amount=self.invested_amount
+            invested_amount=self.invested_amount,
+            create_date=self.create_date,
+            close_date=self.close_date
         )

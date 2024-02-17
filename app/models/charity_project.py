@@ -4,6 +4,13 @@ from sqlalchemy import Column, String, Text
 from app.models.base import CharityBase
 
 
+INFORMATION_MESSAGE = (
+    'name: {name}',
+    'description: {description}',
+    '{super}'
+)
+
+
 class CharityProject(CharityBase):
     name = Column(
         String(100),
@@ -15,5 +22,9 @@ class CharityProject(CharityBase):
         nullable=False
     )
 
-    def __repr__(self):
-        return super().__repr__()
+    def __repr__(self) -> str:
+        return INFORMATION_MESSAGE.format(
+            name=self.name,
+            description=self.description,
+            super=super().__repr__(),
+        )
