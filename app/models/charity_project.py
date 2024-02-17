@@ -3,7 +3,6 @@ from sqlalchemy import Column, String, Text
 
 from app.models.base import CharityBase
 
-
 INFORMATION_MESSAGE = (
     'name: {name}',
     'description: {description}',

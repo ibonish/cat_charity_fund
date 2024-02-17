@@ -5,9 +5,9 @@ from app.core.db import get_async_session
 from app.core.user import current_superuser, current_user
 from app.crud.charity_project import charity_project_crud
 from app.crud.donation import donation_crud
-from app.servises.invest import invest_funds
 from app.models import User
 from app.schemas.donation import DonationCreate, DonationDB
+from app.servises.invest import invest_funds
 
 router = APIRouter()
 

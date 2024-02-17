@@ -1,14 +1,13 @@
 from datetime import datetime
-from typing import Union, List
+from typing import List
 
-from app.models.charity_project import CharityProject
-from app.models.donation import Donation
+from app.models.base import CharityBase
 
 
 def invest_funds(
-    target: Union[CharityProject, Donation],
-    sources: Union[List[CharityProject], List[Donation]],
-) -> Union[List[CharityProject], List[Donation]]:
+    target: CharityBase,
+    sources: List[CharityBase],
+) -> List[CharityBase]:
     updated = []
     for source in sources:
         available_amount = min(

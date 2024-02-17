@@ -2,7 +2,6 @@ from sqlalchemy import Column, ForeignKey, Integer, Text
 
 from app.models.base import CharityBase
 
-
 INFORMATION_MESSAGE = (
     'user_id: {user_id}',
     'comment: {comment}',
