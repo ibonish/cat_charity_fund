@@ -1,11 +1,15 @@
 from datetime import datetime
+from typing import Union, List
+
+from app.models.charity_project import CharityProject
+from app.models.donation import Donation
 
 
 def invest_funds(
-        target,
-        sources,
-):
-    updated_objects = []
+    target: Union[CharityProject, Donation],
+    sources: Union[List[CharityProject], List[Donation]],
+) -> Union[List[CharityProject], List[Donation]]:
+    updated = []
     for source in sources:
         available_amount = min(
             source.full_amount - source.invested_amount,
@@ -18,7 +22,7 @@ def invest_funds(
             )
             if investment.fully_invested:
                 investment.close_date = datetime.now()
-        updated_objects.append(source)
+        updated.append(source)
         if target.fully_invested:
             break
-    return updated_objects
+    return updated
